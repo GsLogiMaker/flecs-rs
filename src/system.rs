@@ -327,7 +327,14 @@ impl Iter {
 		let context = (*self.it).ctx.cast::<T>()
 			.as_ref()
 			.unwrap();
-		&context
+		context
+	}
+
+	pub unsafe fn get_context_mut<'a, T>(&'a mut self) -> &'a mut T {
+		let context = (*self.it).ctx.cast::<T>()
+			.as_mut()
+			.unwrap();
+		context
 	}
 
 	fn get_field<T: Component>(&self, index: i32) -> Column<T> {
