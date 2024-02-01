@@ -66,19 +66,19 @@ pub(crate) fn register_component_typed<T: 'static>(
 
 pub(crate) fn register_component_dynamic(
 	world: *mut ecs_world_t,
-	symbol: &'static str,
-	name: Option<&'static str>,
+	symbol: String,
+	name: Option<String>,
 	layout: Layout,
 ) -> EntityId {
 	// see if we already cached it
-	if let Some(comp_info) = WorldInfoCache::get_component_id_for_symbol(world, symbol) {
+	if let Some(comp_info) = WorldInfoCache::get_component_id_for_symbol(world, &symbol) {
 		return comp_info.id;
 	}
 	let comp_id = register_component(
 		world,
 		ComponentDescriptor {
 			symbol: symbol.to_owned(),
-			name: name.unwrap_or("").to_owned(),
+			name: name.unwrap_or("".into()).to_owned(),
 			custom_id: None,
 			layout,
 		},

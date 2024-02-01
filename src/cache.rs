@@ -37,7 +37,7 @@ pub(crate) struct ComponentInfo {
 
 pub(crate) struct WorldInfoCache {
 	component_typeid_map: HashMap<TypeId, u64>,
-	component_symbol_map: HashMap<&'static str, ComponentInfo>,
+	component_symbol_map: HashMap<String, ComponentInfo>,
 }
 
 impl WorldInfoCache {
@@ -89,7 +89,7 @@ impl WorldInfoCache {
 
 	pub fn get_component_id_for_symbol(
 		world: *mut ecs_world_t,
-		symbol: &'static str,
+		symbol: &str,
 	) -> Option<ComponentInfo> {
 		let world_key = Self::key_for_world(world);
 		let m = WORLD_INFOS.lock().unwrap();
@@ -100,7 +100,7 @@ impl WorldInfoCache {
 	pub fn register_component_id_for_symbol(
 		world: *mut ecs_world_t,
 		comp_id: ecs_entity_t,
-		symbol: &'static str,
+		symbol: String,
 		size: usize,
 	) {
 		let world_key = Self::key_for_world(world);

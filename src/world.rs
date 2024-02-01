@@ -386,17 +386,17 @@ impl World {
 		register_component_typed::<T>(self.world, Some(name))
 	}
 
-	pub fn component_dynamic(&mut self, symbol: &'static str, layout: Layout) -> EntityId {
-		register_component_dynamic(self.world, symbol, None, layout)
+	pub fn component_dynamic(&mut self, symbol: impl Into<String>, layout: Layout) -> EntityId {
+		register_component_dynamic(self.world, symbol.into(), None, layout)
 	}
 
 	pub fn component_dynamic_named(
 		&mut self,
-		symbol: &'static str,
-		name: &'static str,
+		symbol: impl Into<String>,
+		name: impl Into<String>,
 		layout: Layout,
 	) -> EntityId {
-		register_component_dynamic(self.world, symbol, Some(name), layout)
+		register_component_dynamic(self.world, symbol.into(), Some(name.into()), layout)
 	}
 
 	/** Count entities matching a component id.
