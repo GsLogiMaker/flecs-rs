@@ -227,7 +227,7 @@ impl Entity {
 
 	// Dynamic Components
 	//
-	fn get_mut_dynamic(&mut self, symbol: &'static str) -> &mut [u8] {
+	pub fn get_mut_dynamic(&mut self, symbol: &str) -> &mut [u8] {
 		let comp_info = WorldInfoCache::get_component_id_for_symbol(self.world, symbol).unwrap();
 		let value = unsafe { ecs_get_mut_id(self.world, self.entity, comp_info.id) };
 		unsafe {
