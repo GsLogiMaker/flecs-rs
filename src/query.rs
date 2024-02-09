@@ -52,6 +52,10 @@ impl Query {
 			}
 		}
 	}
+
+	pub fn raw(&self) -> *mut ecs_query_t {
+		self.query
+	}
 }
 
 pub struct QueryBuilder<'w> {

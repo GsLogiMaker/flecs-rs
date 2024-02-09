@@ -19,6 +19,10 @@ impl System {
 		Entity::new(self.world, self.id)
 	}
 
+	pub fn id(&self) -> EntityId {
+		self.id
+	}
+
 	pub fn interval(&self, interval: f32) {
 		unsafe { ecs_set_interval(self.world, self.id, interval) };
 	}
@@ -136,7 +140,7 @@ impl<'w> SystemBuilder<'w> {
 	}
 
 	// Build APIs, the 2 variants call the internal build()
-	fn build(&mut self) -> ecs_entity_t {
+	fn build(&mut self, process_id:EntityId) -> ecs_entity_t {
 		let world = self.world.raw();
 		let e: ecs_entity_t;
 
@@ -152,7 +156,7 @@ impl<'w> SystemBuilder<'w> {
 		}
 
 		// We have to add this pair so that the system is part of standard progress stage
-		entity_desc.add[0] = unsafe { ecs_pair(EcsDependsOn, EcsOnUpdate) };
+		entity_desc.add[0] = unsafe { ecs_pair(EcsDependsOn, process_id) };
 
 		// create a system entity
 		self.desc.entity = unsafe { ecs_entity_init(world, &entity_desc) };
@@ -210,6 +214,7 @@ impl<'w> SystemBuilder<'w> {
 	pub fn each<G: ComponentGroup<'w>>(
 		mut self,
 		mut cb: impl FnMut(Entity, G::RefTuple),
+		process_id:EntityId
 	) -> System {
 		let mut closure = |it: *mut ecs_iter_t| unsafe {
 			let it = &(*it);
@@ -225,13 +230,14 @@ impl<'w> SystemBuilder<'w> {
 		self.desc.callback = Some(trampoline);
 		self.desc.binding_ctx = &mut closure as *mut _ as *mut c_void;
 
-		let e = Self::build(&mut self);
+		let e = Self::build(&mut self, process_id);
 		System::new(self.world.raw(), e)
 	}
 
 	pub fn each_mut<G: ComponentGroup<'w>>(
 		mut self,
 		mut cb: impl FnMut(Entity, G::MutRefTuple),
+		process_id:EntityId
 	) -> System {
 		let mut closure = |it: *mut ecs_iter_t| unsafe {
 			let it = &(*it);
@@ -247,11 +253,11 @@ impl<'w> SystemBuilder<'w> {
 		self.desc.callback = Some(trampoline);
 		self.desc.binding_ctx = &mut closure as *mut _ as *mut c_void;
 
-		let e = Self::build(&mut self);
+		let e = Self::build(&mut self, process_id);
 		System::new(self.world.raw(), e)
 	}
 
-	pub fn iter<F: FnMut(&Iter)>(mut self, mut func: F) -> System {
+	pub fn iter<F: FnMut(&Iter)>(mut self, mut func: F, process_id:EntityId) -> System {
 		// we have to wrap the passed in function in a trampoline
 		// so that we can access it again within the C callback handler
 		let mut closure = |it: *mut ecs_iter_t| {
@@ -263,7 +269,7 @@ impl<'w> SystemBuilder<'w> {
 		self.desc.callback = Some(trampoline);
 		self.desc.binding_ctx = &mut closure as *mut _ as *mut c_void;
 
-		let e = Self::build(&mut self);
+		let e = Self::build(&mut self, process_id);
 		System::new(self.world.raw(), e)
 	}
 }
