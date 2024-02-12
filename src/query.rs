@@ -73,6 +73,10 @@ impl<'w> TermBuilder for QueryBuilder<'w> {
 		&mut self.desc.filter
 	}
 
+	fn take_filter_desc(self) -> ecs_filter_desc_t {
+		self.desc.filter
+	}
+
 	fn current_term(&mut self) -> &mut ecs_term_t {
 		&mut self.desc.filter.terms[self.next_term_index]
 	}

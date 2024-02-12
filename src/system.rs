@@ -65,6 +65,10 @@ impl<'w> TermBuilder for SystemBuilder<'w> {
 		&mut self.desc.query.filter
 	}
 
+	fn take_filter_desc(self) -> ecs_filter_desc_t {
+		self.desc.query.filter
+	}
+
 	fn current_term(&mut self) -> &mut ecs_term_t {
 		&mut self.desc.query.filter.terms[self.next_term_index]
 	}
@@ -284,7 +288,7 @@ pub struct Iter {
 }
 
 impl Iter {
-	pub(crate) fn new(it: *mut ecs_iter_t) -> Self {
+	pub fn new(it: *mut ecs_iter_t) -> Self {
 		Iter { it, begin: 0, end: unsafe { (*it).count as usize } }
 	}
 

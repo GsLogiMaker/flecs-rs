@@ -7,6 +7,7 @@ use crate::*;
 pub trait TermBuilder: Sized {
 	fn world(&mut self) -> *mut ecs_world_t;
 	fn filter_desc(&mut self) -> &mut ecs_filter_desc_t;
+	fn take_filter_desc(self) -> ecs_filter_desc_t;
 	fn current_term(&mut self) -> &mut ecs_term_t;
 	fn next_term(&mut self);
 
@@ -47,6 +48,15 @@ pub trait TermBuilder: Sized {
 		// TODO - validate that the comp_id passed is valid
 		let term = self.current_term();
 		term.id = comp_id;
+		self.next_term();
+		self
+	}
+
+	fn term_dynamic_inout(mut self, comp_id: EntityId, inout:ecs_inout_kind_t) -> Self {
+		// TODO - validate that the comp_id passed is valid
+		let term = self.current_term();
+		term.id = comp_id;
+		term.inout = inout;
 		self.next_term();
 		self
 	}

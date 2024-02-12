@@ -99,6 +99,10 @@ impl<'w> TermBuilder for FilterBuilder<'w> {
 		&mut self.desc
 	}
 
+	fn take_filter_desc(self) -> ecs_filter_desc_t {
+		self.desc
+	}
+
 	fn current_term(&mut self) -> &mut ecs_term_t {
 		&mut self.desc.terms[self.next_term_index]
 	}
