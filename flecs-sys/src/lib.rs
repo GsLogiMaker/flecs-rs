@@ -21,9 +21,23 @@ impl Default for ecs_entity_desc_t {
 	}
 }
 
+impl Default for ecs_query_desc_t {
+	fn default() -> Self {
+		let desc: ecs_query_desc_t = unsafe { MaybeUninit::zeroed().assume_init() };
+		desc
+	}
+}
+
 impl Default for ecs_system_desc_t {
 	fn default() -> Self {
 		let desc: ecs_system_desc_t = unsafe { MaybeUninit::zeroed().assume_init() };
+		desc
+	}
+}
+
+impl Default for ecs_term_t {
+	fn default() -> Self {
+		let desc: ecs_term_t = unsafe { MaybeUninit::zeroed().assume_init() };
 		desc
 	}
 }
