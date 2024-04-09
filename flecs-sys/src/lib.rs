@@ -21,6 +21,20 @@ impl Default for ecs_entity_desc_t {
 	}
 }
 
+impl Default for ecs_filter_desc_t {
+	fn default() -> Self {
+		let desc: ecs_filter_desc_t = unsafe { MaybeUninit::zeroed().assume_init() };
+		desc
+	}
+}
+
+impl Default for ecs_observer_desc_t {
+	fn default() -> Self {
+		let desc: ecs_observer_desc_t = unsafe { MaybeUninit::zeroed().assume_init() };
+		desc
+	}
+}
+
 impl Default for ecs_query_desc_t {
 	fn default() -> Self {
 		let desc: ecs_query_desc_t = unsafe { MaybeUninit::zeroed().assume_init() };
