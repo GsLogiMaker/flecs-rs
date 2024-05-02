@@ -1,5 +1,5 @@
 use std::alloc::{Layout, handle_alloc_error};
-use std::ffi::c_void;
+use std::ffi::{c_char, c_void};
 use std::slice::from_raw_parts;
 
 use crate::cache::WorldInfoCache;
@@ -153,7 +153,7 @@ impl<'w> SystemBuilder<'w> {
 		let mut entity_desc: ecs_entity_desc_t = unsafe { MaybeUninit::zeroed().assume_init() };
 
 		if !self.name_temp.is_empty() {
-			entity_desc.name = name_c_str.as_ptr() as *const i8;
+			entity_desc.name = name_c_str.as_ptr() as *const c_char;
 		} else {
 			// We must pass Null to flecs instead of "" otherwise bad stuff happens!
 			entity_desc.name = std::ptr::null()
@@ -167,7 +167,7 @@ impl<'w> SystemBuilder<'w> {
 
 		let expr_c_str = std::ffi::CString::new(self.expr_temp.as_str()).unwrap();
 		if !self.expr_temp.is_empty() {
-			self.desc.query.filter.expr = expr_c_str.as_ptr() as *const i8;
+			self.desc.query.filter.expr = expr_c_str.as_ptr() as *const c_char;
 		} else {
 			// we should infer some filter state from the <(A, B)> generic signature
 		}

@@ -1,4 +1,5 @@
 use std::alloc::Layout;
+use std::ffi::c_char;
 
 use crate::cache::WorldInfoCache;
 use crate::*;
@@ -129,11 +130,11 @@ pub fn register_component(world: *mut ecs_world_t, desc: ComponentDescriptor) ->
 	}
 
 	// For now these are the same as the T::name is passed in
-	entity_desc.name = name_c_str.as_ptr() as *const i8;
-	entity_desc.symbol = symbol_c_str.as_ptr() as *const i8;
+	entity_desc.name = name_c_str.as_ptr() as *const c_char;
+	entity_desc.symbol = symbol_c_str.as_ptr() as *const c_char;
 
-	entity_desc.sep = sep.as_ptr() as *const i8;
-	entity_desc.root_sep = sep.as_ptr() as *const i8;
+	entity_desc.sep = sep.as_ptr() as *const c_char;
+	entity_desc.root_sep = sep.as_ptr() as *const c_char;
 
 	let entity = unsafe { ecs_entity_init(world, &entity_desc) };
 

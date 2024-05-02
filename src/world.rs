@@ -1,5 +1,6 @@
 #![allow(clippy::tabs_in_doc_comments)]
 use std::alloc::Layout;
+use std::ffi::c_char;
 
 use crate::cache::WorldInfoCache;
 use crate::*;
@@ -226,10 +227,10 @@ impl World {
 
 	pub fn lookup(&self, name: &str) -> Option<Entity> {
 		let name_c_str = std::ffi::CString::new(name).unwrap();
-		let sep = NAME_SEP.as_ptr() as *const i8;
+		let sep = NAME_SEP.as_ptr() as *const c_char;
 
 		let entity = unsafe {
-			ecs_lookup_path_w_sep(self.world, 0, name_c_str.as_ptr() as *const i8, sep, sep, true)
+			ecs_lookup_path_w_sep(self.world, 0, name_c_str.as_ptr() as *const c_char, sep, sep, true)
 		};
 
 		if entity > 0 {
@@ -511,8 +512,8 @@ impl World {
 		unsafe {
 			ecs_plecs_from_str(
 				self.world,
-				name_c_str.as_ptr() as *const i8,
-				plecs_c_str.as_ptr() as *const i8,
+				name_c_str.as_ptr() as *const c_char,
+				plecs_c_str.as_ptr() as *const c_char,
 			)
 		}
 	}
@@ -522,7 +523,7 @@ impl World {
 	 */
 	fn plecs_from_file(&mut self, filename: &str) -> i32 {
 		let filename_c_str = std::ffi::CString::new(filename).unwrap();
-		unsafe { ecs_plecs_from_file(self.world, filename_c_str.as_ptr() as *const i8) }
+		unsafe { ecs_plecs_from_file(self.world, filename_c_str.as_ptr() as *const c_char) }
 	}
 
 	/** Serialize world to JSON.
@@ -541,7 +542,7 @@ impl World {
 		let json_c_str = std::ffi::CString::new(json).unwrap();
 		let desc = std::ptr::null();
 		unsafe {
-			let result = ecs_world_from_json(self.world, json_c_str.as_ptr() as *const i8, desc);
+			let result = ecs_world_from_json(self.world, json_c_str.as_ptr() as *const c_char, desc);
 		}
 	}
 }

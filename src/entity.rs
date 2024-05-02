@@ -1,3 +1,4 @@
+use std::ffi::c_char;
 use std::ptr::slice_from_raw_parts;
 
 use crate::cache::WorldInfoCache;
@@ -87,7 +88,7 @@ impl Entity {
 	}
 
 	pub fn path(&self) -> &str {
-		let sep = NAME_SEP.as_ptr() as *const i8; // for now only support :: as sep
+		let sep = NAME_SEP.as_ptr() as *const c_char; // for now only support :: as sep
 		let path_str = unsafe { ecs_get_path_w_sep(self.world, 0, self.entity, sep, sep) };
 		unsafe { flecs_to_rust_str(path_str) }
 	}
