@@ -8,7 +8,7 @@ fn main() {
 	// once for each call to ecs_progress.
 	world.system().iter(|it| {
 		println!("delta_time: {:?}", it.delta_time());
-	});
+	}, 0);
 
 	// Call progress with 0.0f for the delta_time parameter. This will cause
 	// ecs_progress to measure the time passed since the last frame. The

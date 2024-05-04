@@ -23,7 +23,7 @@ fn main() {
 			p.x += v.x;
 			p.y += v.y;
 			println!("{}: {:?}, {:?}", e.name(), p, v);
-		});
+		}, 0);
 
 	world
 		.entity()

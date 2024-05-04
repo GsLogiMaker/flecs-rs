@@ -34,6 +34,7 @@ fn main() {
 		|e, (pos, vel)| {
 			println!("  {}: {:?}, {:?}", e.name(), pos, vel);
 		},
+		0,
 	);
 
 	// Create an entity with name Bob, add Position and food preference

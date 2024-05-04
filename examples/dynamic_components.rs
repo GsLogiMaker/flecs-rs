@@ -84,7 +84,7 @@ fn run_data_example(count: i32) {
 				let data = datas.get(index);
 				println!("   {:?}, {:?}", pos, data);
 			}
-		});
+		}, 0);
 
 	world.progress(0.0333);
 }
