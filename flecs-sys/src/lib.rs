@@ -14,6 +14,12 @@ pub use bindings::*;
 
 // C Struct initializer Defaults
 //
+impl Default for ecs_component_desc_t {
+	fn default() -> Self {
+		unsafe { MaybeUninit::zeroed().assume_init() }
+	}
+}
+
 impl Default for ecs_entity_desc_t {
 	fn default() -> Self {
 		unsafe { MaybeUninit::zeroed().assume_init() }
