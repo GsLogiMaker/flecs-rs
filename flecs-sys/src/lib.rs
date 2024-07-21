@@ -35,6 +35,20 @@ impl Default for ecs_event_desc_t {
 }
 
 impl ecs_iter_t {
+	pub unsafe fn get_binding_context<'a, T>(&'a self) -> &'a T {
+		let context = self.binding_ctx.cast::<T>()
+			.as_ref()
+			.unwrap();
+		context
+	}
+
+	pub unsafe fn get_binding_context_mut<'a, T>(&'a mut self) -> &'a mut T {
+		let context = self.binding_ctx.cast::<T>()
+			.as_mut()
+			.unwrap();
+		context
+	}
+
 	pub unsafe fn get_context<'a, T>(&'a self) -> &'a T {
 		let context = self.ctx.cast::<T>()
 			.as_ref()
